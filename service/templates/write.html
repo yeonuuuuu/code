@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>글 작성</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgb(205, 189, 174);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px 30px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            max-width: 400px;
+            width: 100%;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        input[type="text"],
+        input[type="password"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical; /* 사용자가 높이를 조정 가능 */
+            min-height: 100px;
+            max-height: 300px;
+        }
+        .form-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        input[type="submit"], .button-link {
+            width: 48%;
+            padding: 10px;
+            background-color: rgb(205, 189, 174);
+            border: 1px solid #aaa;
+            border-radius: 4px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        input[type="submit"]:hover, .button-link:hover {
+            background-color: #4a89d6;
+        }
+        @font-face {
+            font-family: 'LeeSeoyun';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2202-2@1.0/LeeSeoyun.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        #headd {
+            font-family: 'LeeSeoyun', sans-serif;
+            font-size: 48px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        h1 img {
+            width: 50px;
+            height: 50px;
+            margin: 0 0px;
+        }
+        a {
+            text-decoration: none;
+        }	
+    </style>
+</head>
+<body>
+	<a href="/">
+        <h1 id="headd">
+            <img src="static/logo.png" alt="Logo">
+            이름이뭐냥
+            <img src="static/logo.png" alt="Logo">
+        </h1>
+    </a>
+
+    <form action="/boardwrite" method="post">
+        <div class="form-group">
+            <label for="title">제목</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+        <div class="form-group">
+            <label for="writer">글쓴이</label>
+            <input type="text" id="writer" name="writer" required>
+        </div>
+        <div class="form-group">
+            <label for="content">내용</label>
+            <!-- 기존 input을 textarea로 변경 -->
+            <textarea id="content" name="content" required></textarea>
+        </div>
+        <!-- 버튼 그룹 -->
+        <div class="form-buttons">
+            <a href="/board" class="button-link">게시판</a>
+            <input type="submit" value="작성">
+        </div>
+    </form>
+</body>
+</html>

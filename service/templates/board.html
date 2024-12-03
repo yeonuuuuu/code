@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgb(205, 189, 174);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            color: #333;
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+        h1 img {
+            width: 50px;
+            height: 50px;
+            margin: 0 0px;
+        }
+        a {
+            text-decoration: none;
+        }
+
+        .write-button {
+            margin-bottom: 20px;
+            text-align: right;
+            width: 100%;
+            max-width: 800px;
+          
+        }
+
+        .write-button button {
+            background-color: #6e6e6e;
+            color: white;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .write-button button:hover {
+            background-color: #3c7a98;
+        }
+        .write-button a {
+            color: white;
+            text-decoration: none;
+        }
+        table {
+            width: 100%;
+            max-width: 800px;
+            border-collapse: collapse;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #6e6e6e;
+            color: #fff;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+        tr:nth-child(even) {
+            background-color: #e5ded8;
+        }
+        tr:hover {
+            background-color: #d9d1cb;
+        }
+        td {
+            font-size: 14px;
+        }
+        .pagination {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .pagination a {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            color: #333;
+            text-decoration: none;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .pagination a:hover {
+            background-color: #6e6e6e;
+            color: white;
+        }
+        .pagination .current-page {
+            background-color: #6e6e6e;
+            color: white;
+            font-weight: bold;
+        }
+        @media (max-width: 600px) {
+            table, th, td {
+                font-size: 12px;
+            }
+            h1 {
+                font-size: 20px;
+            }
+            .write-button button {
+                font-size: 12px;
+                padding: 8px 16px;
+            }
+        }
+        @font-face {
+            font-family: 'LeeSeoyun';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2202-2@1.0/LeeSeoyun.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        #headd {
+            font-family: 'LeeSeoyun', sans-serif;
+            font-size: 48px;
+            font-weight: bold;
+            text-align: center;
+        }
+        a {
+        color: black; /* 일반 링크 색상 */
+        text-decoration: none;
+        }
+        a:visited {
+        color: black; /* 방문한 링크도 같은 색상으로 유지 */
+        }
+    </style>
+</head>
+<body>
+    <a href="/">
+        <h1 id="headd">
+            <img src="static/logo.png" alt="Logo">
+            이름이뭐냥
+            <img src="static/logo.png" alt="Logo">
+        </h1>
+    </a>
+
+    <div class="write-button" style="display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 800px;">
+        {% if 'username' in session %}
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <button><a href="/logout" style="color:white;">로그아웃</a></button>
+            <p style="margin: 0;">환영합니다, {{ session['username'] }}님!</p>
+        </div>
+        {% else %}
+        <button><a href="/login" style="color:white;">로그인</a></button>
+        {% endif %}
+
+        <button><a href="/write" style="color:white;">글쓰기</a></button>
+    </div>
+    <table>
+        <tr>
+            <th>번호</th>
+            <th>제목</th>
+            <th>글쓴이</th>
+            <th>작성일</th>
+            {% if session['username'] == 'ongsjongs' %}
+            <th>삭제</th>
+            {% endif %}
+        </tr>
+        {% for row in board_data %}
+        <tr>
+            <td>{{ row.board_no }}</td>
+            <td><a href="/read/{{ row.board_no }}">{{ row.title }}</a></td>
+            <td>{{ row.writer }}</td>
+            <td>{{ row.board_time }}</td>
+            {% if session['username'] == 'ongsjongs' %}
+            <td><button class="delete-btn" onclick="deleteBoard({{ row.board_no }})">삭제</button></td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </table>
+
+    <div class="pagination">
+        {% if page > 1 %}
+        <a href="/board?page={{ page - 1 }}">이전</a>
+        {% endif %}
+        {% for p in range(1, total_pages + 1) %}
+        <a href="/board?page={{ p }}" class="{{ 'current-page' if p == page else '' }}">{{ p }}</a>
+        {% endfor %}
+        {% if page < total_pages %}
+        <a href="/board?page={{ page + 1 }}">다음</a>
+        {% endif %}
+    </div>
+    <script>
+        function deleteBoard(boardNo) {
+            if (confirm("정말로 게시글을 비활성화하시겠습니까?")) {
+                fetch('/boarddelete', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({
+                        'board_no': boardNo
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        location.reload(); // 페이지 새로고침
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('게시글 비활성화 중 오류가 발생했습니다.');
+                });
+            }
+        }
+    </script>
+</body>
+</html>

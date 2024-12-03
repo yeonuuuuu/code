@@ -1,0 +1,10 @@
+nohup: ignoring input
+2024-11-16 02:29:07.823101: I tensorflow/tsl/cuda/cudart_stub.cc:28] Could not find cuda drivers on your machine, GPU will not be used.
+2024-11-16 02:29:07.886373: I tensorflow/tsl/cuda/cudart_stub.cc:28] Could not find cuda drivers on your machine, GPU will not be used.
+2024-11-16 02:29:07.887053: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2024-11-16 02:29:08.999958: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+ * Serving Flask app 'boxapp'
+ * Debug mode: on
+Address already in use
+Port 4000 is in use by another program. Either identify and stop that program, or start the server with a different port.

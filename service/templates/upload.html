@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이름이뭐냥 : 고양이 품종 찾기</title>
+    <style>
+        /* 전체 레이아웃 스타일 */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            background-color: rgb(205, 189, 174);
+        }
+
+        h1 {
+            color: #333;
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        h1 img {
+            width: 50px;
+            height: 50px;
+            margin: 0 0px;
+        }
+        
+        a {
+            text-decoration: none;
+        }
+
+        /* who div 크기 조정 */
+        #who {
+            width: 400px;
+            height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #who img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        /* 업로드 박스 스타일 */
+        #uploadBox {
+            width: 400px;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #f8f8f8;
+            border: 2px solid #aaa;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2em;
+            color: #555;
+            transition: background-color 0.3s ease;
+            text-align: center;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        #uploadBox:hover {
+            background-color: #e8e8e8;
+        }
+
+        #uploadBox img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 5px;
+            display: none;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+
+
+        button {
+            background-color:  #6e6e6e;
+            color: white;
+            padding: 10px 20px;
+            border: none; 
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+           
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            display: inline-block;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        button:hover {
+            background-color: #d0d0d0;
+        }
+
+        button a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            height: 100%;
+            width: 100%;
+            text-align: center;
+        }
+
+        @font-face {
+            font-family: 'LeeSeoyun';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2202-2@1.0/LeeSeoyun.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        #headd {
+            font-family: 'LeeSeoyun', sans-serif;
+            font-size: 48px;
+            font-weight: bold;
+            text-align: center;
+        }
+        #mainhead {
+            font-family: 'LeeSeoyun', sans-serif;
+            font-size: 35px;
+            font-weight: bold;
+            text-align: center;
+        }
+        #subhead {
+            font-family: 'LeeSeoyun', sans-serif;
+            font-size: 25px;
+            text-align: center;
+        
+        }
+
+        #commentSection {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 40px;
+            border-top: 2px solid #aaa;
+            padding-top: 20px;
+        }
+        .comment {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+        .comment h3 {
+            margin: 0;
+            font-size: 1em;
+            font-weight: bold;
+        }
+        .comment p {
+            margin: 5px 0;
+        }
+        .commentForm input[type="text"],
+        .commentForm textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .commentForm button {
+            margin-top: 10px;
+        }
+        #pagination {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        #pagination button {
+            background-color: #e0e0e0;
+            border: 1px solid #333;
+            color: #333;
+            padding: 8px 12px;
+            margin: 0 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        #pagination button:hover {
+            background-color: #d0d0d0;
+        }
+
+        #pagination #pageNumbers button {
+            width: 35px;
+            height: 35px;
+            background-color: #f8f8f8;
+            color: #333;
+            border: 1px solid #aaa;
+            margin: 0 3px;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        #pagination #pageNumbers button.active {
+            background-color: #333;
+            color: #fff;
+        }
+
+        #pagination #pageNumbers button:hover {
+            background-color: #d0d0d0;
+        }
+
+        .delete-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-top: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <a href="/">
+        <h1 id="headd">
+            <img src="static/logo.png" alt="Logo">
+            이름이뭐냥
+            <img src="static/logo.png" alt="Logo">
+        </h1>
+    </a>
+
+   
+    
+    <h1 id="mainhead">이름이뭐냥: 인공지능을 활용한 고양이 품종 찾기</h1>
+    <h1 id="subhead">내 고양이의 품종은? 궁금하다면 바로 확인해보세요!</h1>
+    <h1 id="subhead">사람의 얼굴도 올려 나와 닮은 고양이도 찾을 수 있습니다!</h1>
+
+    <div id="who">
+        <img src="static/who.png" alt="Logo">    
+    </div>
+    <h1>↓↓테스트 하러가기↓↓</h1>
+    <form action="/" method="post" enctype="multipart/form-data">
+        <div id="uploadBox" onclick="document.getElementById('fileInput').click();">
+            <span id="uploadText">여기를 눌러 사진을 업로드하세요!</span>
+            <img id="preview" src="" alt="Image Preview">
+        </div>
+        <input type="file" id="fileInput" name="file" accept="image/*" onchange="previewImage()">
+        <div style="text-align: right;">
+        <button type="submit" style="margin-top: 5px;">결과보기</button>
+        </div>
+    </form>
+
+    <br><br><br><br>
+    
+    <div style="margin-bottom: 5px;">
+    <button><a href="/board">게시판</a></button>
+    </div>
+    
+    {% if 'username' in session %}
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <button><a href="/logout" style="color:white;">로그아웃</a></button>
+        <p style="margin: 0;">환영합니다, {{ session['username'] }}님!</p>
+    </div>
+    {% else %}
+    <button><a href="/login" style="color:white;">로그인</a></button>
+    {% endif %}
+
+    <div id="commentSection">
+        <h2>댓글</h2>
+        <form class="commentForm" onsubmit="return submitComment(event);">
+            <input type="text" id="username" name="username" placeholder="아이디" required>
+            <textarea id="content" name="content" placeholder="댓글을 입력하세요" required></textarea>
+            <button type="submit">댓글 등록</button>
+        </form>
+
+        <!-- 댓글 목록 -->
+        <div id="commentsList"></div>
+
+        <!-- 페이지 네비게이션 -->
+        <div id="pagination">
+            <button onclick="loadComments(currentPage - 1)" id="prevPage" disabled>&lt;</button>
+            <div id="pageNumbers"></div> <!-- 페이지 번호 버튼이 들어갈 영역 -->
+            <button onclick="loadComments(currentPage + 1)" id="nextPage">&gt;</button>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 1; // 현재 페이지 번호
+        let totalPages = 1;  // 총 페이지 수
+        const currentUser = "{{ session['username'] if 'username' in session else '' }}";
+
+        function previewImage() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            const uploadText = document.getElementById('uploadText');
+            const preview = document.getElementById('preview');
+
+            if (file) {
+                uploadText.style.display = 'none';
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        function loadComments(page) {
+            if (page < 1 || page > totalPages) return;
+
+            fetch(`/comments?page=${page}`)
+                .then(response => response.json())
+                .then(data => {
+                    const commentsList = document.getElementById('commentsList');
+                    commentsList.innerHTML = ''; // 기존 댓글 초기화
+
+                    data.comments.forEach(comment => {
+                        const newComment = document.createElement('div');
+                        newComment.classList.add('comment');
+
+                        // currentUser가 'ongsjongs'일 때만 삭제 버튼 표시
+                        let deleteButtonHTML = '';
+                        if (currentUser === 'ongsjongs') {
+                            deleteButtonHTML = `<button class="delete-btn" onclick="deleteComment(${comment.id})">비활성화</button>`;
+                        }
+
+                        newComment.innerHTML = `
+                            <h3>${comment.username} <small>${comment.comment_time}</small></h3>
+                            <p>${comment.content}</p>
+                            ${deleteButtonHTML}
+                        `;
+
+                        commentsList.appendChild(newComment);
+                    });
+
+                    currentPage = page;
+                    totalPages = data.total_pages;
+                    updatePagination();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        // AJAX로 댓글 제출
+        function submitComment(event) {
+            event.preventDefault(); // 폼 기본 동작 중단
+
+            const username = document.getElementById('username').value;
+            const content = document.getElementById('content').value;
+
+            fetch('/comment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    'username': username,
+                    'content': content
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // 새로운 댓글을 현재 페이지 상단에 추가
+                const commentsList = document.getElementById('commentsList');
+                const newComment = document.createElement('div');
+                newComment.classList.add('comment');
+                newComment.innerHTML = `
+                    <h3>${data.username} <small>${data.comment_time}</small></h3>
+                    <p>${data.content}</p>
+                `;
+                commentsList.insertBefore(newComment, commentsList.firstChild);
+
+                // 폼 초기화
+                document.getElementById('username').value = '';
+                document.getElementById('content').value = '';
+
+                // 페이지를 다시 로드하여 전체 댓글 개수 반영
+                loadComments(currentPage);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("댓글 등록 중 오류가 발생했습니다.");
+            });
+
+            return false; // 폼 제출 중단
+        }
+
+        function updatePagination() {
+        const pageNumbers = document.getElementById('pageNumbers');
+        pageNumbers.innerHTML = '';
+
+        for (let i = 1; i <= totalPages; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.textContent = i;
+            pageButton.onclick = () => loadComments(i);
+
+            if (i === currentPage) {
+                pageButton.classList.add('active');
+            }
+
+            pageNumbers.appendChild(pageButton);
+        }
+
+        document.getElementById('prevPage').disabled = currentPage === 1;
+        document.getElementById('nextPage').disabled = currentPage === totalPages;
+        }
+
+        function deleteComment(commentId) {
+            console.log("Deleting comment ID:", commentId); // 디버그 로그
+            fetch('/delete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    'comment_id': commentId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    loadComments(currentPage); // 현재 페이지 다시 로드
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('댓글 비활성화 중 오류가 발생했습니다.');
+            });
+        }
+    // 페이지 로드 시 첫 번째 페이지 불러오기
+    document.addEventListener('DOMContentLoaded', function() {
+        loadComments(1);
+    });
+    </script>
+</body>
+</html>
